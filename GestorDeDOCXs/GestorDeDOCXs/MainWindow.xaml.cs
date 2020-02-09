@@ -34,6 +34,7 @@ namespace GestorDeDOCXs
         string m_strRutaDeDestino = "";
 
         List<FileInfo> m_lstElementosDeLaRutaDeDestino = new List<FileInfo>();
+        List<string> m_lstElementosRepetidos = new List<string>();
 
         public HashSet<Archivo> ArchivosSeleccionados 
         { 
@@ -57,6 +58,12 @@ namespace GestorDeDOCXs
         { 
             get => m_lstElementosDeLaRutaDeDestino; 
             set => m_lstElementosDeLaRutaDeDestino = value; 
+        }
+
+        public List<string> ElementosRepetidos 
+        { 
+            get => m_lstElementosRepetidos; 
+            set => m_lstElementosRepetidos = value; 
         }
 
         public MainWindow()
@@ -168,6 +175,12 @@ namespace GestorDeDOCXs
                     MessageBox.Show("El archivo " + aArchivosParaCopiar.NombreDelArchivo +
                         " ya existe en el directorio asignado", "Gestor de DOCXs",
                         MessageBoxButton.OK, MessageBoxImage.Warning);
+
+                    if (ElementosRepetidos.Contains(aArchivosParaCopiar.NombreDelArchivo))
+                        continue;
+                    else 
+                        ElementosRepetidos.Add(aArchivosParaCopiar.NombreDelArchivo);
+                    
                     continue;
                 }
 
@@ -175,7 +188,8 @@ namespace GestorDeDOCXs
                     RutaDeDestino + "\\" + aArchivosParaCopiar.NombreDelArchivo);
             }
 
-            MessageBox.Show("Proceso terminado exitosamente");
+            MessageBox.Show("Proceso terminado exitosamente", "Gestor de DOCXs",
+                MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void btnMover_Click(object sender, RoutedEventArgs e)
@@ -187,15 +201,29 @@ namespace GestorDeDOCXs
                 return;
             }
 
-            foreach (Archivo aArchivosParaCopiar in ArchivosSeleccionados)
+            foreach (Archivo aArchivosParaMover in ArchivosSeleccionados)
             {
-                if (aArchivosParaCopiar == null) continue;
+                if (aArchivosParaMover == null) continue;
 
-                File.Move(aArchivosParaCopiar.RutaDeOrigen,
-                RutaDeDestino + "\\" + aArchivosParaCopiar.NombreDelArchivo);
+                DirectoryInfo directoryInfo = new DirectoryInfo(RutaDeDestino);
+
+                ElementosDeLaRutaDeDestino = directoryInfo.GetFiles(
+                    aArchivosParaMover.NombreDelArchivo).ToList();
+
+                if (ElementosDeLaRutaDeDestino.Count != 0)
+                {
+                    MessageBox.Show("El archivo " + aArchivosParaMover.NombreDelArchivo +
+                        " ya existe en el directorio asignado", "Gestor de DOCXs",
+                        MessageBoxButton.OK, MessageBoxImage.Warning);
+                    continue;
+                }
+
+                File.Move(aArchivosParaMover.RutaDeOrigen,
+                RutaDeDestino + "\\" + aArchivosParaMover.NombreDelArchivo);
             }
 
-            MessageBox.Show("Proceso terminado exitosamente");
+            MessageBox.Show("Proceso terminado exitosamente", "Gestor de DOCXs", 
+                MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }
