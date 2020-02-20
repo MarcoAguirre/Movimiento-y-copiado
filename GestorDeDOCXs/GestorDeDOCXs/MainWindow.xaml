@@ -19,8 +19,8 @@
         </Grid.RowDefinitions>
 
         <TextBox Name="txtRutaDeDestino" Width="510" Height="25" Grid.ColumnSpan="2"
-                   Grid.Row="0" Text="Seleccione el lugar donde quiera copiar o mover los archivos pulsando éste botón --->"
-                 BorderThickness="2" HorizontalAlignment="Right"/>
+                   Grid.Row="0" Text="Seleccione el lugar donde quiera copiar o mover los archivos, pulsando éste botón --->"
+                 BorderThickness="2" HorizontalAlignment="Right" IsReadOnly="True"/>
 
         <Button Name="btnFijarRutaDeDestino" Width="100" Height="25" Grid.Column="2" Grid.Row="0"
                 VerticalAlignment="Center" HorizontalAlignment="Center" Content="EstablecerDestino" 

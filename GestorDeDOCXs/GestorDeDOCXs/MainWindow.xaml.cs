@@ -32,6 +32,8 @@ namespace GestorDeDOCXs
         HashSet<string> m_hsRutasDeCadaArchivo = new HashSet<string>();
 
         string m_strRutaDeDestino = "";
+        string m_strNombresDeArchivosParaMostrarEnElMessageBox = "";
+        
 
         List<FileInfo> m_lstElementosDeLaRutaDeDestino = new List<FileInfo>();
         List<string> m_lstElementosRepetidos = new List<string>();
@@ -58,12 +60,6 @@ namespace GestorDeDOCXs
         { 
             get => m_lstElementosDeLaRutaDeDestino; 
             set => m_lstElementosDeLaRutaDeDestino = value; 
-        }
-
-        public List<string> ElementosRepetidos 
-        { 
-            get => m_lstElementosRepetidos; 
-            set => m_lstElementosRepetidos = value; 
         }
 
         public MainWindow()
@@ -172,20 +168,27 @@ namespace GestorDeDOCXs
 
                 if (ElementosDeLaRutaDeDestino.Count != 0)
                 {
-                    MessageBox.Show("El archivo " + aArchivosParaCopiar.NombreDelArchivo +
-                        " ya existe en el directorio asignado", "Gestor de DOCXs",
-                        MessageBoxButton.OK, MessageBoxImage.Warning);
-
-                    if (ElementosRepetidos.Contains(aArchivosParaCopiar.NombreDelArchivo))
+                    if (m_lstElementosRepetidos.Contains(aArchivosParaCopiar.NombreDelArchivo))
                         continue;
-                    else 
-                        ElementosRepetidos.Add(aArchivosParaCopiar.NombreDelArchivo);
-                    
+                    else
+                        m_lstElementosRepetidos.Add(aArchivosParaCopiar.NombreDelArchivo);
+
                     continue;
                 }
 
                 File.Copy(aArchivosParaCopiar.RutaDeOrigen,
                     RutaDeDestino + "\\" + aArchivosParaCopiar.NombreDelArchivo);
+            }
+
+            m_strNombresDeArchivosParaMostrarEnElMessageBox = string.Join(
+                Environment.NewLine, m_lstElementosRepetidos);
+
+            if (!string.IsNullOrEmpty(m_strNombresDeArchivosParaMostrarEnElMessageBox) || 
+                !string.IsNullOrWhiteSpace(m_strNombresDeArchivosParaMostrarEnElMessageBox))
+            {
+                MessageBox.Show("Los archivos: " + m_strNombresDeArchivosParaMostrarEnElMessageBox +
+                " ya existen en el directorio asignado", "Gestor de DOCXs",
+                MessageBoxButton.OK, MessageBoxImage.Warning);
             }
 
             MessageBox.Show("Proceso terminado exitosamente", "Gestor de DOCXs",
@@ -212,14 +215,27 @@ namespace GestorDeDOCXs
 
                 if (ElementosDeLaRutaDeDestino.Count != 0)
                 {
-                    MessageBox.Show("El archivo " + aArchivosParaMover.NombreDelArchivo +
-                        " ya existe en el directorio asignado", "Gestor de DOCXs",
-                        MessageBoxButton.OK, MessageBoxImage.Warning);
+                    if (m_lstElementosRepetidos.Contains(aArchivosParaMover.NombreDelArchivo))
+                        continue;
+                    else
+                        m_lstElementosRepetidos.Add(aArchivosParaMover.NombreDelArchivo);
+
                     continue;
                 }
 
                 File.Move(aArchivosParaMover.RutaDeOrigen,
                 RutaDeDestino + "\\" + aArchivosParaMover.NombreDelArchivo);
+            }
+
+            m_strNombresDeArchivosParaMostrarEnElMessageBox = string.Join(
+                Environment.NewLine, m_lstElementosRepetidos);
+
+            if (!string.IsNullOrEmpty(m_strNombresDeArchivosParaMostrarEnElMessageBox) ||
+                !string.IsNullOrWhiteSpace(m_strNombresDeArchivosParaMostrarEnElMessageBox))
+            {
+                MessageBox.Show("Los archivos: " + m_strNombresDeArchivosParaMostrarEnElMessageBox +
+                " ya existen en el directorio asignado", "Gestor de DOCXs",
+                MessageBoxButton.OK, MessageBoxImage.Warning);
             }
 
             MessageBox.Show("Proceso terminado exitosamente", "Gestor de DOCXs", 
