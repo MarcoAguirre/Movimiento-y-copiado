@@ -34,7 +34,6 @@ namespace GestorDeDOCXs
         string m_strRutaDeDestino = "";
         string m_strNombresDeArchivosParaMostrarEnElMessageBox = "";
         
-
         List<FileInfo> m_lstElementosDeLaRutaDeDestino = new List<FileInfo>();
         List<string> m_lstElementosRepetidos = new List<string>();
 
